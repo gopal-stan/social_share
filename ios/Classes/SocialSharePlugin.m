@@ -149,14 +149,17 @@
                 //check if trailing text equals null
                 if ( [ trailingText   length] == 0 ) {
                     //if trailing text is null
-                    NSString *urlSchemeSms = [NSString stringWithFormat:@"twitter://post?message=%@",captionText];
+                    NSString *urlSchemeSms = [NSString stringWithFormat:@"twitter:///post?message=%@",captionText];
                     //appending url with normal text and url scheme
                     NSString *urlWithLink = [urlSchemeSms stringByAppendingString:[url absoluteString]];
 
                     //final urlscheme
                     NSURL *urlSchemeMsg = [NSURL URLWithString:urlWithLink];
                     if (@available(iOS 10.0, *)) {
-                        [[UIApplication sharedApplication] openURL:urlSchemeMsg options:@{} completionHandler:nil];
+                        
+                        [[UIApplication sharedApplication] openURL:urlSchemeMsg options:@{} completionHandler:^(BOOL success) {
+      NSLog(@"Open %@: %d",scheme,success);
+    }];
                         result(@"sharing");
                     } else {
                         result(@"this only supports iOS 10+");
